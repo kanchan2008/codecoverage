@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "CnIcCvcCOtGGwBXCVPxaHAOqvvWqQ1K/wr/gBSyHCp+LXWj6d0GHKd+Dt7y9oGHgFkt45GEmfsI7MWG/YTNs+w==",
+  "dgSpecHash": "LRr5pwMjpIy71XJpY8m0RyEEVjZpAeq2QaXZ34QoPXWl8dLg88sYCymeLrthV50IoEUVN4Vx9KsAGPN13jWbgA==",
   "success": true,
-  "projectFilePath": "D:\\Code\\Ascendion\\SampleApp\\SampleApp.csproj",
+  "projectFilePath": "D:\\Code\\Ascendion\\codecoverage\\SampleApp\\SampleApp.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

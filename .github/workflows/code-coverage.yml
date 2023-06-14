@@ -24,7 +24,7 @@ jobs:
           dotnet build --configuration Release
           cd ../SampleApp.Tests
           dotnet test --configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
-          cd ../
+#          cd ../
 
       - name: Publish code coverage
         uses: actions/github-script@v4
@@ -33,7 +33,8 @@ jobs:
           script: |
             const fs = require('fs');
             const path = require('path');
-            const reportPath = path.join('${{ github.workspace }}', 'SampleApp.Tests', 'coverage.opencover.xml');
+#            const reportPath = path.join('${{ github.workspace }}', 'SampleApp.Tests', 'coverage.opencover.xml');
+            const reportPath = path.join('SampleApp.Tests', 'coverage.opencover.xml');
             const reportContent = fs.readFileSync(reportPath, 'utf8');
             const comment = `Code coverage report:\n\`\`\`\n${reportContent}\n\`\`\``;
             const { owner, repo, number } = context.issue;

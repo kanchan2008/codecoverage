@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Code\\Ascendion\\SampleApp.Tests\\SampleApp.Tests.csproj": {}
+    "D:\\Code\\Ascendion\\codecoverage\\SampleApp.Tests\\SampleApp.Tests.csproj": {}
   },
   "projects": {
-    "D:\\Code\\Ascendion\\SampleApp.Tests\\SampleApp.Tests.csproj": {
+    "D:\\Code\\Ascendion\\codecoverage\\SampleApp.Tests\\SampleApp.Tests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Code\\Ascendion\\SampleApp.Tests\\SampleApp.Tests.csproj",
+        "projectUniqueName": "D:\\Code\\Ascendion\\codecoverage\\SampleApp.Tests\\SampleApp.Tests.csproj",
         "projectName": "SampleApp.Tests",
-        "projectPath": "D:\\Code\\Ascendion\\SampleApp.Tests\\SampleApp.Tests.csproj",
+        "projectPath": "D:\\Code\\Ascendion\\codecoverage\\SampleApp.Tests\\SampleApp.Tests.csproj",
         "packagesPath": "C:\\Users\\kanch\\.nuget\\packages\\",
-        "outputPath": "D:\\Code\\Ascendion\\SampleApp.Tests\\obj\\",
+        "outputPath": "D:\\Code\\Ascendion\\codecoverage\\SampleApp.Tests\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\kanch\\AppData\\Roaming\\NuGet\\NuGet.Config"

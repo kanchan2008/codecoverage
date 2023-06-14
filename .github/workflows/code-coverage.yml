@@ -1,0 +1,38 @@
+name: Code Coverage
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '5.0.x' # Replace with your desired .NET version
+
+      - name: Build and test
+        run: |
+          dotnet build --configuration Release
+          dotnet test --configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
+
+      - name: Publish code coverage
+        uses: actions/github-script@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            const reportPath = path.join('${{ github.workspace }}', 'SampleApp.Tests', 'coverage.opencover.xml');
+            const reportContent = fs.readFileSync(reportPath, 'utf8');
+            const comment = `Code coverage report:\n\`\`\`\n${reportContent}\n\`\`\``;
+            const { owner, repo, number } = context.issue;
+            await github.issues.createComment({ owner, repo, issue_number: number, body: comment });
+

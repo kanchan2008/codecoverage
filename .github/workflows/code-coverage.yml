@@ -24,7 +24,7 @@ jobs:
           dotnet build --configuration Release
           cd ../SampleApp.Tests
           dotnet test --configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
-#          cd ../
+          cd ../
 
       - name: Publish code coverage
         uses: actions/github-script@v4

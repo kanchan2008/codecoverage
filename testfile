@@ -1,0 +1,31 @@
+name: Deploy Logic App Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      
+    - name: Deploy Logic App
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+      
+    - name: Set up Azure Logic Apps
+      uses: azure/setup-logicapps@v1
+      
+    - name: Deploy to Azure Logic Apps
+      uses: azure/deploy-logicapps@v1
+      with:
+        azureSubscription: '<your-subscription-id>'
+        resourceGroupName: '<your-resource-group-name>'
+        location: '<your-location>'
+        logicAppName: '<your-logic-app-name>'
+        templateFile: '<path-to-your-arm-template>'

@@ -1,0 +1,26 @@
+name: Deploy T-SQL Script
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up SQLCMD
+        uses: microsoft/setup-msbuild@v1
+        with:
+          sqlpackage: 'latest'
+
+      - name: Deploy T-SQL script
+        run: |
+          changed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
+          echo "$changed_files" | grep -E 'path/to/your/script.sql' || exit 0
+          sqlcmd -S <server_name> -d <database_name> -U <username> -P <password> -i path/to/your/script.sql

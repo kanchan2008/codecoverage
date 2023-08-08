@@ -3,7 +3,6 @@ name: Deploy T-SQL Script
 on:
   pull_request:
     types:
-      - opened
       - synchronize
 
 jobs:
@@ -19,8 +18,17 @@ jobs:
         with:
           sqlpackage: 'latest'
 
-      - name: Deploy T-SQL script
+      - name: Get changed files
+        id: changed_files
         run: |
-          changed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
-          echo "$changed_files" | grep -E 'path/to/your/script.sql' || exit 0
-          sqlcmd -S <server_name> -d <database_name> -U <username> -P <password> -i path/to/your/script.sql
+          echo "::set-output name=files::$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})"
+        
+      - name: Apply changed files
+        run: |
+          changed_files="${{ steps.changed_files.outputs.files }}"
+          for file in $changed_files; do
+            if [ "$file" = "path/to/your/script.sql" ]; then
+              sqlcmd -S <server_name> -d <database_name> -U <username> -P <password> -i "$file"
+            fi
+            # Add more conditions to handle other changed files if needed
+          done

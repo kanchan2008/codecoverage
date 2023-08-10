@@ -32,8 +32,9 @@ jobs:
         
       - name: Apply changed files
         run: |
-          for file in 1 2 3
-          do
-                   echo $file
+          @echo off
+          for /file in (1 2 3)
+          do (
+                   echo $file )
           done
     

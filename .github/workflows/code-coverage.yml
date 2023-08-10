@@ -1,19 +1,39 @@
-name:  Mendax Example
+name: Deploy T-SQL Script
+
+#on:
+#  pull_request:
+#    types:
+#      - synchronize
 
 on:
+  workflow_dispatch:  
+               
   push:
     branches:
-      - main
+      - 'main'
+
 
 jobs:
-  loop_job:
-    runs-on: ubuntu-latest
+  deploy:
+    runs-on: windows-latest
 
     steps:
-      - name: Mendax Loop through numbers
-        id: loop
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+
+
+      - name: Get changed files
+        id: changed_files
         run: |
-          for file in  test test1
+          echo "::set-output name=files::$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})"
+
+        
+      - name: Apply changed files
+        run: |
+          for file in 1 2 3
           do
-            echo "$file"
+                   echo $file
           done
+    

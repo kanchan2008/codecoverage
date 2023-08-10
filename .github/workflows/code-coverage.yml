@@ -13,7 +13,7 @@ jobs:
       - name: Mendax Loop through numbers
         id: loop
         run: |
-          for file in (.github/workflows/TestingTSQL.yml)
+          for file in (".github/workflows/TestingTSQL.yml")
           do
             echo "$file"
           done

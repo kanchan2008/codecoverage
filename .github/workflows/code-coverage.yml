@@ -32,7 +32,6 @@ jobs:
         
       - name: Apply changed files
         run: |
-          @echo off
           for /l %%file in (1 2 3)
           do (
                    echo %%file )

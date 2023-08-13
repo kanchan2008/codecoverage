@@ -1,39 +1,29 @@
-name: Deploy T-SQL Script
-
-#on:
-#  pull_request:
-#    types:
-#      - synchronize
+name: Run T-SQL via GitHub Actions
 
 on:
-  workflow_dispatch:  
-               
   push:
     branches:
-      - 'main'
-
+      - main  # Change this to the branch you want to trigger the workflow on
 
 jobs:
-  deploy:
-    runs-on: windows-latest
+  run-tsql:
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
+      - name: Set up SQL Server tools
+        uses: microsoft/setup-msbuild@v1
         with:
-          fetch-depth: 2
+          dotnet-version: 'latest'  # Change this if necessary
 
-
-      - name: Get changed files
-        id: changed_files
+      - name: Run T-SQL script
         run: |
-          echo "::set-output name=files::$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})"
+          sqlcmd
+          # Run your T-SQL commands here
+          # Example:
+          # sqlcmd -S <server_name> -d <database_name> -U <username> -P <password> -i path/to/script.sql
+          # Make sure to set up appropriate secrets or credentials for secure access
+          
 
-        
-      - name: Apply changed files
-        run: |
-          for /l %%file in (1 2 3)
-          do (
-                   echo %%file )
-          done
-    

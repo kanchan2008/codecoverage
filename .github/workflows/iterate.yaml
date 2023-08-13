@@ -1,17 +1,20 @@
-name: manifests
-on:
-  push:
-    branches:
-      - main 
-job1:
-  runs-on: ubuntu-latest
-  outputs:
-    matrix: ${{ steps.set-matrix.outputs.matrix }}
-  steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 2
-    - id: set-matrix
-      run: echo "::set-output name=matrix::$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})"
-
-      
+name: build
+on: push
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+    outputs:
+			# This needs to match your step's id and name parameters
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+			# Important: Do not forget the id!
+      - id: set-matrix
+        run: echo "::set-output name=matrix::{\"node\":[10, 12, 14]}"
+  job2:
+    needs: job1
+    runs-on: ubuntu-latest
+    strategy:
+			# This needs to match the first job's name and output parameter
+      matrix: ${{fromJSON(needs.job1.outputs.matrix)}}
+    steps:
+      - run: build

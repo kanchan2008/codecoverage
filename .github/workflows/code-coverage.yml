@@ -21,7 +21,7 @@ jobs:
           script_paths=$(find . -type f -name '*.sql')
           scripts=""
           for path in $script_paths; do
-            scripts="$scripts$path"
+            scripts="$scripts$path"\b
           done
           echo "::set-output name=scripts::$scripts"          
     

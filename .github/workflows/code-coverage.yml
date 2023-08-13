@@ -13,14 +13,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up SQL Server tools
+      - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1
-        with:
-          dotnet-version: 'latest'  # Change this if necessary
 
-      - name: Run T-SQL script
-        run: |
-          sqlcmd
+      #- name: Set up SQL Server tools
+      #  uses: microsoft/setup-msbuild@v1
+      #  with:
+      #    dotnet-version: 'latest'  # Change this if necessary
+
+      #- name: Run T-SQL script
+      #  run: |
+       #   sqlcmd
           # Run your T-SQL commands here
           # Example:
           # sqlcmd -S <server_name> -d <database_name> -U <username> -P <password> -i path/to/script.sql

@@ -14,7 +14,8 @@ jobs:
       - name: List T-SQL Scripts
         id: list-scripts
         run: |
-          script_paths=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} )    
+          script_paths=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} )
+          echo $script_paths
           
       - id: set-matrix
         run: echo "::set-output name=matrix::{\"node\":[$script_paths]}"

@@ -3,22 +3,20 @@ on:
   push:
     branches:
       - main 
-jobs:
-
-  setup:
-    runs-on: ubuntu-latest
-    outputs:
-      matrix: ${{ steps.matrix.outputs.value }}
-    steps:
-      - id: matrix
-        run: |
-          echo '::set-output name=value::[\"a\", \"b\", \"c\"]'
-  build:
-    needs: [ setup ]
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        value: ${{fromJson(needs.setup.outputs.matrix)}}
-    steps:
-      - run: |
-          echo "${{ matrix.value }}"
+job1:
+  runs-on: ubuntu-latest
+  outputs:
+    matrix: ${{ steps.set-matrix.outputs.matrix }}
+  steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 2
+    - id: set-matrix
+      run: echo "::set-output name=matrix::$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})"
+job2:
+  name: ${{ matrix.stack }}
+  needs: job1
+  runs-on: ubuntu-latest
+  strategy:
+    matrix:
+      stack: ${{fromJSON(needs.job1.outputs.matrix)}}

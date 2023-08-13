@@ -1,41 +1,26 @@
-name: iterate
-
+name: manifests
 on:
   push:
     branches:
-      - main  # Change this to the branch you want to trigger the workflow on
-
+      - main 
 jobs:
-  run-tsql:
+  list-manifests:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v2
+      - id: set-matrix
+        with:
+          fetch-depth: 2      
+        run: echo "::set-output name=matrix::$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})"
+  check:
+    needs: list-manifests
     runs-on: ubuntu-latest
     strategy:
-      matrix: 
-         files: ${{ steps.list-scripts.outputs.scripts }}    
-#    strategy:
-#      matrix:
-#        version: ${{ github.event.client_payload.versions }}
-
+        matrix:
+            manifest: ${{ fromJson(needs.list-manifests.outputs.matrix) }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 2
-
-      - name: List T-SQL Scripts
-        id: list-scripts
-        run: |
-          script_paths=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} )
-          echo $script_paths
-          scripts=""
-          for path in $script_paths; do
-            scripts="$scripts $path"
-          done
-          echo "::set-output name=scripts::$scripts"   
-
-      - name: list
-        run: |
-          echo "${{ matrix.files }}"
-          
-
-          
-          
+      - uses: actions/checkout@v2   
+      - run: |
+        ./check-manifest ${{ martix.manifest }}

@@ -52,5 +52,5 @@ jobs:
       - name: Run T-SQL script
         run: |
           for sqlfile in ${{ steps.list-scripts.outputs.scripts }} ; do
-            echo "sqlcmd $sqlfile"
+            echo "sqlcmd ${{ github.workspace }}/$sqlfile"
           done

@@ -4,23 +4,21 @@ on:
     branches:
       - main 
 jobs:
-  list-manifests:
+
+  setup:
     runs-on: ubuntu-latest
     outputs:
-      matrix: ${{ steps.set-matrix.outputs.matrix }}
+      matrix: ${{ steps.matrix.outputs.value }}
     steps:
-      - uses: actions/checkout@v2
-      - id: set-matrix
-        with:
-          fetch-depth: 2      
-        run: echo "::set-output name=matrix::$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})"
-  check:
-    needs: list-manifests
+      - id: matrix
+        run: |
+          echo '::set-output name=value::[\"a\", \"b\", \"c\"]'
+  build:
+    needs: [ setup ]
     runs-on: ubuntu-latest
     strategy:
-        matrix:
-            manifest: ${{ fromJson(needs.list-manifests.outputs.matrix) }}
+      matrix:
+        value: ${{fromJson(needs.setup.outputs.matrix)}}
     steps:
-      - uses: actions/checkout@v2   
       - run: |
-          ./check-manifest ${{ martix.manifest }}"
+          echo "${{ matrix.value }}"

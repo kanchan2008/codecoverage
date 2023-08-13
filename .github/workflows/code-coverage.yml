@@ -21,7 +21,7 @@ jobs:
           script_paths=$(find . -type f -name '*.sql')
           scripts=""
           for path in $script_paths; do
-            scripts="$scripts$path\t"
+            scripts="$scripts$path"
           done
           echo "::set-output name=scripts::$scripts"          
     
@@ -48,4 +48,6 @@ jobs:
 
       - name: Run T-SQL script
         run: |
-          echo ${{ steps.list-scripts.outputs.scripts }}
+          for sqlfile in ${{ steps.list-scripts.outputs.scripts }} ; do
+            echo "sqlcmd sqlfile"
+          done

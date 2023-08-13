@@ -20,3 +20,8 @@ job2:
   strategy:
     matrix:
       stack: ${{fromJSON(needs.job1.outputs.matrix)}}
+  steps:
+    - name: test
+      run: |
+        echo "test"
+      

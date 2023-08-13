@@ -13,20 +13,24 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v1
+      - name: Install SQL Server tools
+        run: |
+          # Import the Microsoft repository GPG keys
+          curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
 
-      #- name: Set up SQL Server tools
-      #  uses: microsoft/setup-msbuild@v1
-      #  with:
-      #    dotnet-version: 'latest'  # Change this if necessary
+          # Register the Microsoft SQL Server repository
+          sudo add-apt-repository "$(curl https://packages.microsoft.com/config/ubuntu/20.04/mssql-server-2019.list)"
 
-      #- name: Run T-SQL script
-      #  run: |
-       #   sqlcmd
-          # Run your T-SQL commands here
-          # Example:
-          # sqlcmd -S <server_name> -d <database_name> -U <username> -P <password> -i path/to/script.sql
-          # Make sure to set up appropriate secrets or credentials for secure access
-          
+          # Update the package list
+          sudo apt-get update
 
+          # Install SQL Server tools
+          sudo ACCEPT_EULA=Y apt-get install -y mssql-tools unixodbc-dev
+
+          # Add sqlcmd to the PATH
+          echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
+          source ~/.bashrc
+
+      - name: Run T-SQL script
+        run: |
+          sqlcmd

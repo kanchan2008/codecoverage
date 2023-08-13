@@ -21,6 +21,7 @@ jobs:
         id: list-scripts
         run: |
           script_paths=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -E '\.sql$')
+          echo $script_paths
           scripts=""
           for path in $script_paths; do
             scripts="$scripts $path"

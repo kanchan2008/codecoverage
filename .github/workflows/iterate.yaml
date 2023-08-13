@@ -8,8 +8,9 @@ on:
 jobs:
   run-tsql:
     runs-on: ubuntu-latest
-    outputs:
-      matrix: ${{ steps.list-scripts.outputs.scripts }}    
+    strategy:
+      matrix: 
+         files: ${{ steps.list-scripts.outputs.scripts }}    
 #    strategy:
 #      matrix:
 #        version: ${{ github.event.client_payload.versions }}
@@ -30,6 +31,11 @@ jobs:
             scripts="$scripts $path"
           done
           echo "::set-output name=scripts::$scripts"   
+
+      - name: list
+        run: |
+          echo "${{ matrix.files }}"
+          
 
           
           

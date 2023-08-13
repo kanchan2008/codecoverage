@@ -13,10 +13,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+
+
       - name: List T-SQL Scripts
         id: list-scripts
         run: |
-          echo "::set-output name=scripts::$(find . -type f -name '*.sql')"
+          script_paths=$(find . -type f -name '*.sql')
+          scripts=""
+          for path in $script_paths; do
+            scripts="$scripts$path\t"
+          done
+          echo "::set-output name=scripts::$scripts"          
     
 
 

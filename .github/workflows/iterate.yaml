@@ -13,15 +13,5 @@ job1:
         fetch-depth: 2
     - id: set-matrix
       run: echo "::set-output name=matrix::$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})"
-job2:
-  name: ${{ matrix.stack }}
-  needs: job1
-  runs-on: ubuntu-latest
-  strategy:
-    matrix:
-      stack: ${{fromJSON(needs.job1.outputs.matrix)}}
-  steps:
-    - name: test
-      run: |
-        echo "test"
+
       

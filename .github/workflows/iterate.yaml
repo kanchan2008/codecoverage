@@ -1,22 +1,31 @@
+---
 name: manifests
+
 on: [push, pull_request]
+
 jobs:
-  list-manifests:
+  list-manifests11:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 2
       - id: set-matrix
         run: echo "::set-output name=matrix::$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | jq -R -s -c 'split("\n")[:-1]')"
-  check:
-    needs: list-manifests
+
+
+
+
+  manifest-checks-jdk11:
+    needs: list-manifests11
     runs-on: ubuntu-latest
     strategy:
-        matrix:
-            manifest: ${{ fromJson(needs.list-manifests.outputs.matrix) }}
-    steps:  
-      - run: |
-          echo ${{ martix.manifest }}
+      matrix:
+        manifest: ${{ fromJson(needs.list-manifests11.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: OpenSearch Manifests
+        run: |-
+          echo ${{ matrix.manifest }} 

@@ -5,8 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
-    steps:
-      - name: set matrix    
+    steps:   
       - id: set-matrix
         run: echo "::set-output name=matrix::{\"node\":[10, 12, 14]}"
   job2:

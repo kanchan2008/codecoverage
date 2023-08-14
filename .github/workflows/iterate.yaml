@@ -13,7 +13,7 @@ jobs:
       - id: set-matrix
         run: |
           script_paths=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} )
-          echo "::set-output name=matrix::{\"node\":[ "script_paths" ]}"
+          echo "::set-output name=matrix::{\"node\":[ $script_paths |  jq -Rsc '. / "\n" - [""]' ]}"
   job2:
     needs: job1
     runs-on: ubuntu-latest

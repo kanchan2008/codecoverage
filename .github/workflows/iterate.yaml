@@ -1,24 +1,21 @@
-name: build
-on: push
+name: manifests
+on: [push, pull_request]
 jobs:
-  job1:
+  list-manifests:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
-    steps:   
-      - name: Checkout code
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 2    
+    steps:
+      - uses: actions/checkout@v2
       - id: set-matrix
         run: echo "::set-output name=matrix::$(ls *.sql | jq -R -s -c 'split("\n")[:-1]')"
-#        run: |
-#          echo $(git diff --name-only ${{ github.event.before }} ${{ github.sha }} |  jq -Rsc '. / "\n" - [""]')
-#          echo "::set-output name=matrix::$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} |  jq -Rsc '. / "\n" - [""]')"
-  job2:
-    needs: job1
+  check:
+    needs: list-manifests
     runs-on: ubuntu-latest
     strategy:
-      matrix: ${{fromJSON(needs.job1.outputs.matrix)}}
+        matrix:
+            manifest: ${{ fromJson(needs.list-manifests.outputs.matrix) }}
     steps:
-      - run: echo "test"
+      - uses: actions/checkout@v2   
+      - run: |
+          echo ${{ martix.manifest }}

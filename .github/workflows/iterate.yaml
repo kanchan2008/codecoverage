@@ -17,7 +17,6 @@ jobs:
     strategy:
         matrix:
             manifest: ${{ fromJson(needs.list-manifests.outputs.matrix) }}
-    steps:
-      - uses: actions/checkout@v2   
+    steps:  
       - run: |
-          echo test
+          echo ${{ martix.manifest }}

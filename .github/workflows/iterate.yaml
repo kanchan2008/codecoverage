@@ -19,4 +19,4 @@ jobs:
             manifest: ${{ fromJson(needs.list-manifests.outputs.matrix) }}
     steps:  
       - run: |
-          echo ${{ martix.manifest }}
+          echo ${{ fromJson(needs.list-manifests.outputs.matrix) }}

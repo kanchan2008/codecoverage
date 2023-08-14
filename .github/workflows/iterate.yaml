@@ -4,7 +4,7 @@ name: manifests
 on: [push, pull_request]
 
 jobs:
-  list-manifests11:
+  list-files:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
@@ -18,14 +18,14 @@ jobs:
 
 
 
-  manifest-checks-jdk11:
-    needs: list-manifests11
+  apply-sql:
+    needs: list-files
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        manifest: ${{ fromJson(needs.list-manifests11.outputs.matrix) }}
+        manifest: ${{ fromJson(needs.list-files.outputs.matrix) }}
     steps:
       - uses: actions/checkout@v3
-      - name: OpenSearch Manifests
+      - name: Apply sql files
         run: |-
           echo ${{ matrix.manifest }} 

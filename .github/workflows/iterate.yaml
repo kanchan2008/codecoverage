@@ -10,7 +10,7 @@ jobs:
         with:
           fetch-depth: 2
       - id: set-matrix
-        run: echo "::set-output name=matrix::$(ls *.sql | jq -R -s -c 'split("\n")[:-1]')"
+        run: echo "::set-output name=matrix::$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | jq -R -s -c 'split("\n")[:-1]')"
   check:
     needs: list-manifests
     runs-on: ubuntu-latest

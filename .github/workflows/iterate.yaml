@@ -11,9 +11,10 @@ jobs:
         with:
           fetch-depth: 2    
       - id: set-matrix
-        run: |
-          echo $(git diff --name-only ${{ github.event.before }} ${{ github.sha }} |  jq -Rsc '. / "\n" - [""]')
-          echo "::set-output name=matrix::$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} |  jq -Rsc '. / "\n" - [""]')"
+        run: echo "::set-output name=matrix::{\"node\":[".github/workflows/iterate.yaml"]}"
+#        run: |
+#          echo $(git diff --name-only ${{ github.event.before }} ${{ github.sha }} |  jq -Rsc '. / "\n" - [""]')
+#          echo "::set-output name=matrix::$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} |  jq -Rsc '. / "\n" - [""]')"
   job2:
     needs: job1
     runs-on: ubuntu-latest

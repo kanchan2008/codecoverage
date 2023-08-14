@@ -7,6 +7,8 @@ jobs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
       - id: set-matrix
         run: echo "::set-output name=matrix::$(ls *.sql | jq -R -s -c 'split("\n")[:-1]')"
   check:

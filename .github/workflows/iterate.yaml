@@ -11,7 +11,9 @@ jobs:
         with:
           fetch-depth: 2    
       - id: set-matrix
-        run: echo "::set-output name=matrix::{\"node\":[10, 12, 14]}"
+        run: |
+          script_paths=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} )
+          echo "::set-output name=matrix::{\"node\":[$script_paths]}"
   job2:
     needs: job1
     runs-on: ubuntu-latest

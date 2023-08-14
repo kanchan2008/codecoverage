@@ -6,6 +6,10 @@ jobs:
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:   
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2    
       - id: set-matrix
         run: echo "::set-output name=matrix::{\"node\":[10, 12, 14]}"
   job2:

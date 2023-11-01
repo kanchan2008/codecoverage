@@ -1,0 +1,25 @@
+name: Get Changes in Files
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  get-changes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Last Commit ID
+        id: last_commit
+        run: |
+          LAST_SHA=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/actions/runs | jq -r '.workflow_runs[0].head_sha')
+          echo "::set-output name=last_commit_id::${LAST_SHA}"
+      - name: Get File Changes
+        id: file_changes
+        run: |
+          git fetch --depth=1 origin ${{ steps.last_commit.outputs.last_commit_id }}
+          files_changed=$(git diff --name-only ${{ steps.last_commit.outputs.last_commit_id }} HEAD)
+          echo "::set-output name=changed_files::${files_changed}"
+      - name: Display Changes
+        run: |
+          echo "Changed Files: ${{ steps.file_changes.outputs.changed_files }}"

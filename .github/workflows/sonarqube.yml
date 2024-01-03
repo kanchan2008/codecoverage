@@ -1,0 +1,41 @@
+name: SonarQube Analysis
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sonarqube-analysis:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1  # Adjust version as needed
+
+    - name: Cache SonarQube Scanner
+      uses: actions/cache@v2
+      with:
+        path: ~/.sonar/cache
+        key: sonarqube-${{ runner.os }}-${{ hashFiles('*/.csproj') }}
+        restore-keys: |
+          sonarqube-${{ runner.os }}-
+
+    - name: SonarQube Scan
+      run: |
+        dotnet tool install --global dotnet-sonarscanner --version 5.2.1
+        export PATH="$PATH:$HOME/.dotnet/tools"
+        dotnet sonarscanner begin /k:"YourProjectKey" /d:sonar.host.url="http://your-sonarqube-server" /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+        dotnet build
+        dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+
+    - name: Upload SonarQube Quality Gate Status
+      uses: SonarSource/sonarcloud-github-action@master
+      with:
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
+        waitForQualityGate: true

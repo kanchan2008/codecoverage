@@ -50,6 +50,7 @@ jobs:
            dotnet build --configuration Release
            cd ../SampleApp.Tests
            dotnet test --configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
+           cd ..
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
 
           # --collect:"XPlat Code Coverage" `

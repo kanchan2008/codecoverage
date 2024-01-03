@@ -16,7 +16,7 @@ jobs:
     - name: Set up .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 6.1  # Adjust version as needed
+        dotnet-version: 6.0.25  # Adjust version as needed
 
     - name: Cache SonarQube Scanner
       uses: actions/cache@v2

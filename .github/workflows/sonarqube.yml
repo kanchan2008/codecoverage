@@ -31,7 +31,8 @@ jobs:
         dotnet tool install --global dotnet-sonarscanner --version 5.2.1
         export PATH="$PATH:$HOME/.dotnet/tools"
         dotnet sonarscanner begin /k:"kanchan2008_codecoverage" /o:"kanchan2008" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
-        dotnet build
+        dotnet restore codecoverage/SampleApp.Tests/SampleApp.Tests.csproj
+        dotnet build 
         dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
 
     - name: Upload SonarQube Quality Gate Status

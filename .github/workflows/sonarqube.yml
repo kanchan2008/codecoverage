@@ -45,5 +45,6 @@ jobs:
     - name: Upload SonarQube Quality Gate Status
       uses: SonarSource/sonarcloud-github-action@master
       with:
-        githubToken: ${{ secrets.GITHUB_TOKEN }}
+        githubToken: ${{ secrets.PAT_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         waitForQualityGate: true

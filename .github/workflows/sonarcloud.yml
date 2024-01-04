@@ -48,4 +48,5 @@ jobs:
            dotnet restore SampleApp/SampleApp.csproj
            dotnet build --configuration Release SampleApp/SampleApp.csproj
            dotnet test --configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat=opencover SampleApp.Tests/SampleApp.Tests.csproj --collect:"XPlat Code Coverage" --logger trx /p:CoverletOutput='./coverage.opencover.xml'
+           copy SampleApp.Tests/TestResults/*/coverage.opencover.xml ./coverage.opencover.xml
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"

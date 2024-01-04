@@ -44,7 +44,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"kanchan2008_codecoverage" /o:"kanchan2008" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="D:\a\codecoverage\codecoverage\SampleApp.Tests\TestResults\*\coverage.cobertura.xml"
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"kanchan2008_codecoverage" /o:"kanchan2008" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="D:\a\codecoverage\codecoverage\SampleApp.Tests\TestResults\*\coverage.cobertura.xml" /d:sonar.coverageReportPaths="D:\a\codecoverage\codecoverage\SampleApp.Tests\TestResults\*\coverage.cobertura.xml"
            dotnet restore SampleApp/SampleApp.csproj
            dotnet build --configuration Release SampleApp/SampleApp.csproj
            dotnet test --configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat=opencover SampleApp.Tests/SampleApp.Tests.csproj --collect:"XPlat Code Coverage" --logger trx /p:CoverletOutput='./coverage.opencover.xml'

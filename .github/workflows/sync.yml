@@ -1,0 +1,20 @@
+name: Auto Merge Feature Branch to V2.0
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  merge-to-v2:
+    if: github.event.pull_request.merged && github.event.pull_request.base.ref == 'V1.2'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Get feature branch name
+        id: branch_name
+        run: echo "::set-output name=branch::$(echo ${GITHUB_REF#refs/heads/})"
+      
+      - name: Create PR to merge feature branch into V2.0
+        run: |
+          gh pr create --title "Merge ${{ steps.branch_name.outputs.branch }} into V2.0" --body "Automatically created PR to merge ${{ steps.branch_name.outputs.branch }} into V2.0" --base V2.0 --head ${{ steps.branch_name.outputs.branch }}

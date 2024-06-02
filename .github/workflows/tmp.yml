@@ -1,35 +1,23 @@
-name: Build and Tag Docker Image
-
+name: Trigger Action from Docker Images
+   
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+    inputs:
+      docker_image:
+        description: 'Select Docker Image'
+        required: true
+        options: ${{ steps.get_images.outputs.available_images }}
 
 jobs:
-  build-and-tag:
+  get_images:
     runs-on: ubuntu-latest
-
+    outputs:
+      available_images: ${{ steps.set_available_images.outputs.available_images }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Extract and sanitize branch name
-        id: extract_branch
+      - name: Retrieve Available Docker Images
+        id: set_available_images
         run: |
-          BRANCH_NAME=${GITHUB_HEAD_REF##*/}
-          SANITIZED_BRANCH_NAME=$(echo $BRANCH_NAME | sed 's/^v//')
-          echo "::set-output name=sanitized_branch_name::$SANITIZED_BRANCH_NAME"
-
-      - name: Build Docker image
-        run: docker build -t myapp:${{ steps.extract_branch.outputs.sanitized_branch_name }}-${{ github.event.number }} .
-
-      - name: Push Docker image
-        run: docker push myapp:${{ steps.extract_branch.outputs.sanitized_branch_name }}-${{ github.event.number }}
+          # Use your script or command to retrieve the list of images
+          # Store the list in a file or output it as JSON
+          # For demonstration, setting a static list here
+          echo "::set-output name=available_images::['image1', 'image2', 'image3']"

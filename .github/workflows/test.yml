@@ -1,0 +1,36 @@
+name: Check GHCR Image Tag
+
+on:
+  push:
+    branches:
+      - main  # Adjust the branch as necessary
+
+jobs:
+  check-ghcr-image-tag:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up GitHub CLI
+        uses: actions/setup-gh@v2
+
+      - name: Authenticate with GitHub CLI
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+
+      - name: Check if Image Tag Exists
+        env:
+          IMAGE_NAME: your_image_name  # Replace with your image name
+          IMAGE_TAG: your_image_tag    # Replace with the image tag you want to check
+        run: |
+          TAG_EXISTS=$(gh api --paginate -H "Accept: application/vnd.github.v3+json" /user/packages/container/$IMAGE_NAME/versions | jq -e --arg TAG "$IMAGE_TAG" '.[] | select(.metadata.container.tags[] == $TAG)' > /dev/null && echo "true" || echo "false")
+          echo "TAG_EXISTS=$TAG_EXISTS" >> $GITHUB_ENV
+
+      - name: Output Result
+        run: |
+          if [ "$TAG_EXISTS" == "true" ]; then
+            echo "The image with tag $IMAGE_TAG exists in GHCR."
+          else
+            echo "The image with tag $IMAGE_TAG does not exist in GHCR."
+          fi

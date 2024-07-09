@@ -1,21 +1,13 @@
-jobs:
-  download_artifact_from_other_repo:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout this repository
-        uses: actions/checkout@v2
+REPO="owner/repo"
+ARTIFACT_NAME="my-artifact"
 
-      - name: List artifacts
-        run: |
-          curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-          -H "Accept: application/vnd.github.v3+json" \
-          https://api.github.com/repos/owner/repo/actions/artifacts
+# Get the list of artifacts and filter by name to get the download URL
+DOWNLOAD_URL=$(gh api -H "Accept: application/vnd.github.v3+json" /repos/$REPO/actions/artifacts | jq -r ".artifacts[] | select(.name==\"$ARTIFACT_NAME\") | .archive_download_url")
 
-      - name: Download artifact from another repository
-        run: |
-          curl -L -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-          -H "Accept: application/vnd.github.v3+json" \
-          https://api.github.com/repos/owner/repo/actions/artifacts/artifact_id/zip \
-          --output artifact.zip
-      - name: Unzip artifact
-        run: unzip artifact.zip -d path/where/you/want/to/save
+if [ -n "$DOWNLOAD_URL" ]; then
+  # Download the artifact using curl
+  curl -L -H "Authorization: token $GITHUB_TOKEN" -o artifact.zip $DOWNLOAD_URL
+  echo "Artifact downloaded successfully: artifact.zip"
+else
+  echo "Artifact with name $ARTIFACT_NAME not found."
+fi

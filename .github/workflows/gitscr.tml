@@ -1,0 +1,22 @@
+      - name: Find Artifact by Name
+        id: find_artifact
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const artifacts = await github.actions.listArtifactsForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            });
+            const artifact = artifacts.data.artifacts.find(a => a.name === 'my-artifact');
+            if (!artifact) {
+              throw new Error(`Artifact "my-artifact" not found`);
+            }
+            return artifact.id;
+          result-encoding: string
+
+      - name: Download Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: my-artifact
+          path: path/where/you/want/to/save
+        if: success() && steps.find_artifact.outputs.result != ''

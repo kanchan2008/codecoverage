@@ -1,0 +1,43 @@
+Job Description: Azure DevOps Engineer
+
+Position Overview:
+We are seeking a skilled and experienced Azure DevOps Engineer with a strong background in managing and automating cloud infrastructure and application deployments. The ideal candidate will have 4-5 years of hands-on experience in working with Azure Kubernetes Service (AKS), GitHub Actions, .NET, Angular, Azure Entra ID, App Registration, Managed Identity, Function App, Azure Data Factory, Azure App Services, Python, and Jira. Additionally, experience with Azure Log Analytics Workspace, Azure Monitor, Prometheus, and Grafana is essential. The candidate should demonstrate the ability to take ownership of projects, ensuring the successful deployment and maintenance of applications and services.
+
+Key Responsibilities:
+
+AKS Management: Deploy, manage, and troubleshoot applications on Azure Kubernetes Service.
+CI/CD Pipelines: Design, implement, and manage CI/CD pipelines using GitHub Actions to automate .NET and Angular builds.
+Azure Entra ID and App Registration: Manage Azure Entra ID, including app registrations and configuring managed identities for secure resource access.
+Azure Function Apps: Develop, deploy, and maintain Azure Function Apps.
+Azure Data Factory: Handle deployment and management of Azure Data Factory pipelines.
+Azure App Services: Deploy, manage, and scale web applications on Azure App Services.
+Scripting and Automation: Write and maintain automation scripts using Python and other relevant technologies.
+Monitoring and Logging:
+Implement and manage Azure Log Analytics Workspace and Azure Monitor for monitoring and logging.
+Configure and manage Prometheus for metrics collection.
+Set up and maintain Grafana for visualization of metrics and logs.
+Jira Management: Utilize Jira for project tracking, issue management, and collaboration.
+Collaboration and Ownership: Work closely with cross-functional teams, take ownership of projects, and ensure timely delivery and operational excellence.
+Monitoring and Optimization: Implement monitoring solutions and optimize performance for all deployed services and applications.
+Required Skills and Experience:
+
+4-5 Years of Experience: Proven track record as an Azure DevOps Engineer or in a similar role.
+Technical Proficiency:
+Expertise in Azure Kubernetes Service (AKS).
+Strong experience with GitHub Actions for CI/CD pipeline creation and management.
+Proficiency in building and deploying .NET and Angular applications.
+In-depth knowledge of Azure Entra ID, app registration, and managed identities.
+Experience with Azure Function Apps, Azure Data Factory, and Azure App Services.
+Proficient in Python scripting for automation tasks.
+Experience with Azure Log Analytics Workspace and Azure Monitor.
+Knowledge of Prometheus for metrics collection.
+Experience with Grafana for data visualization.
+Project Management: Familiarity with Jira for project management and issue tracking.
+Problem-Solving Skills: Strong analytical and troubleshooting abilities.
+Communication Skills: Excellent verbal and written communication skills.
+Team Player: Ability to work collaboratively in a team environment.
+Preferred Qualifications:
+
+Azure certifications (e.g., Microsoft Certified: Azure DevOps Engineer Expert).
+Experience with other automation and configuration management tools.
+Familiarity with other programming languages and frameworks.

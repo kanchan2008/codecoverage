@@ -1,0 +1,45 @@
+Step 1: T-SQL Script with Parameters
+First, create a T-SQL script (query.sql) that accepts parameters:
+
+-- query.sql
+DECLARE @UserInput NVARCHAR(100) = N'$1';  -- Placeholder for user input
+
+SELECT *
+FROM Users
+WHERE Username = @UserInput;
+
+
+In this example, the T-SQL script expects a Username parameter and returns the matching user records.
+
+Step 2: GitHub Action Workflow
+Next, define a GitHub Action that takes input from the user and passes it to the T-SQL script.  
+
+
+# .github/workflows/sql-pipeline.yml
+name: Run T-SQL Script with User Input
+
+on:
+  workflow_dispatch:
+    inputs:
+      username:
+        description: 'Enter the username'
+        required: true
+        default: 'JohnDoe'
+
+jobs:
+  run_sql_query:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Run T-SQL Script
+      uses: Azure/sql-action@v2
+      with:
+        connection-string: ${{ secrets.AZURE_SQL_CONNECTION_STRING }}  # Add this to your GitHub secrets
+        # SQL script that will be executed
+        script-path: './query.sql'
+        # Pass user input as a parameter
+        arguments: ${{ github.event.inputs.username }}
+  

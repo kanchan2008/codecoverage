@@ -1,0 +1,34 @@
+name: Scheduled Workflow
+
+on:
+  schedule:
+    - cron: '0 0 * * 0' # Run every Sunday at 00:00 (midnight)
+    - cron: '0 0 * * 3' # Run every Wednesday at 00:00 (midnight)
+
+jobs:
+
+  run-on-dev-branch:
+    runs-on: ubuntu-latest
+    
+    # Only run this job on the 'dev' branch
+    if: github.ref == 'refs/heads/dev'
+    
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run script on dev branch
+      run: |
+        # Your script or command to run on the dev branch
+        echo "Running script on dev branch"
+        
+  run-on-main-branch:
+    runs-on: ubuntu-latest
+    
+    # Only run this job on the 'main' branch  
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run script on main branch
+      run: |
+        # Your script or command to run on the main branch
+        echo "Running script on main branch"

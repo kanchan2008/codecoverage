@@ -1,9 +1,10 @@
 name: Scheduled Workflow
 
 on:
-  schedule:
-    - cron: '0 0 * * 0' # Run every Sunday at 00:00 (midnight)
-    - cron: '0 0 * * 3' # Run every Wednesday at 00:00 (midnight)
+
+#  schedule:
+#    - cron: '0 0 * * 0' # Run every Sunday at 00:00 (midnight)
+#    - cron: '0 0 * * 3' # Run every Wednesday at 00:00 (midnight)
 
 jobs:
 

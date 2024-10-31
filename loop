@@ -1,0 +1,26 @@
+name: Replace Secret Value in Azure SQL Connection String
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update-connection-string:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Replace Catalog in AZURE_SQL_CON
+        env:
+          AZURE_SQL_CON: ${{ secrets.AZURE_SQL_CON }}
+        run: |
+          # Replace "Catalog=xx" with "Catalog=yy" in the AZURE_SQL_CON
+          NEW_AZURE_SQL_CON="${AZURE_SQL_CON/Catalog=xx/Catalog=yy}"
+          
+          # Export the modified connection string as an environment variable
+          echo "AZURE_SQL_CON=$NEW_AZURE_SQL_CON" >> $GITHUB_ENV
+
+      - name: Verify the new AZURE_SQL_CON
+        run: echo "New AZURE_SQL_CON: $AZURE_SQL_CON" # Just for verification (remove in production)

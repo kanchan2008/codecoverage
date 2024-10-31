@@ -1,4 +1,4 @@
-name: Replace Secret Value in Azure SQL Connection String
+name: Run Azure SQL Action for Each Catalog Value
 
 on:
   push:
@@ -6,21 +6,40 @@ on:
       - main
 
 jobs:
-  update-connection-string:
+  setup-matrix:
     runs-on: ubuntu-latest
+    outputs:
+      catalogs: ${{ steps.get-catalogs.outputs.catalogs }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Replace Catalog in AZURE_SQL_CON
+      - name: Read catalog values from file
+        id: get-catalogs
+        run: |
+          # Read each line from the catalogs file and convert it to a JSON array
+          catalogs=$(cat catalogs.txt | jq -R . | jq -s .)
+          echo "::set-output name=catalogs::$catalogs"
+
+  run-azure-sql-action:
+    needs: setup-matrix
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        catalog: ${{ fromJson(needs.setup-matrix.outputs.catalogs) }}
+    steps:
+      - name: Set up connection string with modified Catalog
         env:
           AZURE_SQL_CON: ${{ secrets.AZURE_SQL_CON }}
         run: |
-          # Replace "Catalog=xx" with "Catalog=yy" in the AZURE_SQL_CON
-          NEW_AZURE_SQL_CON="${AZURE_SQL_CON/Catalog=xx/Catalog=yy}"
-          
-          # Export the modified connection string as an environment variable
-          echo "AZURE_SQL_CON=$NEW_AZURE_SQL_CON" >> $GITHUB_ENV
+          # Replace 'Catalog=xx' with 'Catalog=<matrix.catalog>' in the connection string
+          NEW_CONNECTION_STRING="${AZURE_SQL_CON/Catalog=xx/Catalog=${{ matrix.catalog }}}"
 
-      - name: Verify the new AZURE_SQL_CON
-        run: echo "New AZURE_SQL_CON: $AZURE_SQL_CON" # Just for verification (remove in production)
+          # Export the modified connection string as an environment variable for the next step
+          echo "AZURE_SQL_CON=$NEW_CONNECTION_STRING" >> $GITHUB_ENV
+
+      - name: Execute SQL command on Azure SQL Database
+        uses: azure/sql-action@v2
+        with:
+          connection-string: ${{ env.AZURE_SQL_CON }}
+          sql-file: ./scripts/query.sql  # Replace with the path to your SQL file

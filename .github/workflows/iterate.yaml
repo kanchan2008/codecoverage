@@ -1,7 +1,18 @@
----
 name: manifests
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main  # or any other branch you want to monitor for pushes
+  pull_request:
+    branches:
+      - main  # or any other branch for PR triggers
+  workflow_dispatch:  # Allow manual triggering of the workflow
+    inputs:
+      environment:
+        description: 'The environment to deploy to (default is prod)'
+        required: false
+        default: 'prod'
 
 jobs:
   list-files:
@@ -13,10 +24,10 @@ jobs:
         with:
           fetch-depth: 2
       - id: set-matrix
-        run: echo "::set-output name=matrix::$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | jq -R -s -c 'split("\n")[:-1]')"
-
-
-
+        run: |
+          # Create a list of changed files and output it in JSON format
+          CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | jq -R -s -c 'split("\n")[:-1]')
+          echo "matrix=$CHANGED_FILES" >> $GITHUB_OUTPUT  # Save it as an output variable
 
   apply-sql:
     needs: list-files
@@ -24,8 +35,9 @@ jobs:
     strategy:
       matrix:
         manifest: ${{ fromJson(needs.list-files.outputs.matrix) }}
+    environment: ${{ github.event.inputs.environment || 'prod' }}  # Use input 'environment' or default to 'prod'
     steps:
       - uses: actions/checkout@v3
-      - name: Apply sql files
-        run: |-
-          echo ${{ matrix.manifest }} 
+      - name: Apply SQL files
+        run: |
+          echo "Applying SQL for file: ${{ matrix.manifest }} in environment: ${{ github.event.inputs.environment || 'prod' }}"

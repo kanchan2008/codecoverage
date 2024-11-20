@@ -31,6 +31,7 @@ jobs:
           # Check if there are no changed files
           if [ -z "$CHANGED_FILES" ]; then
             echo "No changed files detected, defaulting to test.sql"
+            # Default to test.sql if no files are changed
             echo "matrix=[\"test.sql\"]" >> $GITHUB_OUTPUT
           else
             echo "matrix=$CHANGED_FILES" >> $GITHUB_OUTPUT

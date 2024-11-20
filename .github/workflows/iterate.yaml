@@ -35,9 +35,22 @@ jobs:
     strategy:
       matrix:
         manifest: ${{ fromJson(needs.list-files.outputs.matrix) }}
-    environment: ${{ github.event.inputs.environment || 'prod' }}  # Use input 'environment' or default to 'prod'
+    environment: ${{ github.event.inputs.environment || 'prod' }}  # Default to 'prod' if not provided
     steps:
       - uses: actions/checkout@v3
-      - name: Apply SQL files
+      
+      # Apply SQL for Development Environment
+      - name: Apply SQL for Development Environment
+        if: ${{ github.event.inputs.environment == 'dev' }}
         run: |
-          echo "Applying SQL for file: ${{ matrix.manifest }} in environment: ${{ github.event.inputs.environment || 'prod' }}"
+          echo "Applying SQL for file: ${{ matrix.manifest }} in environment: dev"
+          # Here you can add your commands for applying SQL to dev environment
+          # Example: psql -h $DEV_DB_HOST -U $DEV_DB_USER -d $DEV_DB_NAME -f ${{ matrix.manifest }}
+      
+      # Apply SQL for Production Environment
+      - name: Apply SQL for Production Environment
+        if: ${{ github.event.inputs.environment == 'prod' }}
+        run: |
+          echo "Applying SQL for file: ${{ matrix.manifest }} in environment: prod"
+          # Here you can add your commands for applying SQL to prod environment
+          # Example: psql -h $PROD_DB_HOST -U $PROD_DB_USER -d $PROD_DB_NAME -f ${{ matrix.manifest }}

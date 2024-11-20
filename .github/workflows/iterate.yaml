@@ -27,8 +27,15 @@ jobs:
         run: |
           # Create a list of changed files and output it in JSON format
           CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | jq -R -s -c 'split("\n")[:-1]')
-          echo "matrix=$CHANGED_FILES" >> $GITHUB_OUTPUT  # Save it as an output variable
-
+          
+          # Check if there are no changed files
+          if [ -z "$CHANGED_FILES" ]; then
+            echo "No changed files detected, defaulting to test.sql"
+            echo "matrix=[\"test.sql\"]" >> $GITHUB_OUTPUT
+          else
+            echo "matrix=$CHANGED_FILES" >> $GITHUB_OUTPUT
+          fi
+          
   apply-sql:
     needs: list-files
     runs-on: ubuntu-latest

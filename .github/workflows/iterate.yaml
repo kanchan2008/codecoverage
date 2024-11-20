@@ -14,6 +14,11 @@ on:
         options:
           - dev
           - prod
+      artifact_version:
+        description: 'Version of the artifact to deploy'
+        required: false
+        default: '1.2.3'  # Default version
+        type: string
 
 jobs:
   determine-environment:
@@ -65,6 +70,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       
+      - name: Print Artifact Version
+        run: |
+          echo "Artifact version is: ${{ github.event.inputs.artifact_version }}"
+
 #      - name: Install SQLFluff
 #        run: pip install sqlfluff
       

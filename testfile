@@ -1,5 +1,5 @@
 name: Deploy Logic App Workflow
-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
+
 on:
   push:
     branches:

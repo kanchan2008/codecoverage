@@ -1,0 +1,15 @@
+name: output Workflow
+on:
+  workflow_dispatch:
+    inputs:
+      test_type:
+        description: 'Type of test to run'
+        required: true
+
+jobs:
+  record-inputs:
+    runs-on: ubuntu-latest
+    outputs:
+      inputs: ${{ toJSON(github.event.inputs) }}
+    steps:
+      - run: echo "Recording inputs"

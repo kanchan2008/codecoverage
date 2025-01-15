@@ -12,5 +12,5 @@ jobs:
     outputs:
       inputs: ${{ toJSON(github.event.inputs) }}
     steps:
-      - run: echo "input ${{ github.event.inputs }}"
+      - run: echo "input ${{ github.event.inputs.test_type }}"
       

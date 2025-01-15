@@ -12,4 +12,5 @@ jobs:
     outputs:
       inputs: ${{ toJSON(github.event.inputs) }}
     steps:
-      - run: echo "Recording inputs"
+      - run: echo "input ${{ toJSON(github.event.inputs) }}"
+      

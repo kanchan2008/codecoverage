@@ -30,11 +30,13 @@ jobs:
         run: |
           if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
             echo "environment=${{ github.event.inputs.environment }}" >> $GITHUB_OUTPUT
-            echo ${{ github.event.inputs.artifact_version }}
+            echo "PR_Number=${{ github.event.inputs.artifact_version }}"
           elif [ "${{ github.event_name }}" == "pull_request" ] || [[ "${{ github.ref }}" == "refs/heads/dev/"* ]] || [[ "${{ github.ref }}" == "refs/heads/feature/"* ]]; then
             echo "environment=dev" >> $GITHUB_OUTPUT
+            echo "PR_Number=${{ github.event.inputs.artifact_version }}"
           else
             echo "environment=prod" >> $GITHUB_OUTPUT
+            echo "PR_Number=${{ github.event.inputs.artifact_version }}"
           fi
 
   list-files:

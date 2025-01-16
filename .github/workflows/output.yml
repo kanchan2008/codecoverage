@@ -12,5 +12,5 @@ jobs:
     outputs:
       inputs: ${{ toJSON(github.event.inputs) }}
     steps:
-      - run: echo "test_type=${{ github.event.inputs.test_type }}"
+      - run: echo "PR Number=${{ github.event.inputs.test_type }}"
       

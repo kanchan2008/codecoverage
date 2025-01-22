@@ -1,0 +1,46 @@
+name: CI with Personal Notifications
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    # Your workflow steps here
+    - name: Run tests
+      run: |
+        echo "Running tests..."
+        exit 1  # This will force the workflow to fail (remove this in production)
+
+    # Create issue on failure
+    - name: Create issue on failure
+      if: failure()
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const { repo, owner } = context.repo;
+          github.rest.issues.create({
+            owner,
+            repo,
+            title: '❌ Workflow Failed: ${{ github.workflow }}',
+            body: `### Workflow Failed
+            
+            [View the failed workflow run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            
+            - **Branch:** ${{ github.ref_name }}
+            - **Commit Message:** ${{ github.event.head_commit.message }}
+            
+            Check the workflow logs for more details.`
+          });

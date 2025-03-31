@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Deploy Applications</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 500px; margin: auto; }
+        label, input { display: block; margin: 10px 0; }
+        button { padding: 10px; background: blue; color: white; border: none; cursor: pointer; }
+    </style>
 </head>
 <body>
     <h2>Enter Application Versions</h2>
@@ -11,42 +16,24 @@
         <label>App 1: <input type="text" name="app1" required></label>
         <label>App 2: <input type="text" name="app2" required></label>
         <label>App 3: <input type="text" name="app3" required></label>
-        <button type="submit">Deploy</button>
+        <button type="submit">Trigger Deployment</button>
     </form>
 
     <script>
-        document.getElementById('deployForm').addEventListener('submit', async function(event) {
+        document.getElementById('deployForm').addEventListener('submit', function(event) {
             event.preventDefault();
 
             let formData = new FormData(event.target);
             let appVersions = {};
+            formData.forEach((value, key) => { appVersions[key] = value; });
 
-            formData.forEach((value, key) => {
-                appVersions[key] = value;
-            });
+            let jsonVersions = JSON.stringify(appVersions);
+            
+            // Construct GitHub Actions workflow dispatch URL
+            let githubURL = `https://github.com/kanchan2008/codecoverage/actions/workflows/notify.yml?inputs[app_versions]=${encodeURIComponent(jsonVersions)}`;
 
-            let issueTitle = "Deployment Request";
-            let issueBody = `### Deployment Request\n\n\`\`\`json\n${JSON.stringify(appVersions, null, 2)}\n\`\`\``;
-
-            let response = await fetch("https://api.github.com/repos/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME/issues", {
-                method: "POST",
-                headers: {
-                    "Accept": "application/vnd.github.v3+json",
-                    "Authorization": "Bearer YOUR_GITHUB_PERSONAL_ACCESS_TOKEN",
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    title: issueTitle,
-                    body: issueBody
-                })
-            });
-
-            if (response.ok) {
-                alert("Deployment request created!");
-            } else {
-                alert("Failed to create issue.");
-                console.error(await response.json());
-            }
+            // Redirect user to GitHub Actions page to manually trigger workflow
+            window.location.href = githubURL;
         });
     </script>
 </body>

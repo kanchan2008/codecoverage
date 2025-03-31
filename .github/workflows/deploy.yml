@@ -1,0 +1,15 @@
+name: Deploy Applications
+
+on:
+  workflow_dispatch:
+    inputs:
+      app_versions:
+        description: "JSON string containing app versions"
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print Application Versions
+        run: echo "Deploying applications with versions: ${{ inputs.app_versions }}"

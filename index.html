@@ -30,7 +30,7 @@
             let jsonVersions = JSON.stringify(appVersions);
             
             // Construct GitHub Actions workflow dispatch URL
-            let githubURL = `https://github.com/kanchan2008/codecoverage/actions/workflows/notify.yml?inputs[app_versions]=${encodeURIComponent(jsonVersions)}`;
+            let githubURL = `https://github.com/kanchan2008/codecoverage/actions/workflows/deploy.yml?inputs[app_versions]=${encodeURIComponent(jsonVersions)}`;
 
             // Redirect user to GitHub Actions page to manually trigger workflow
             window.location.href = githubURL;

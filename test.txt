@@ -2,3 +2,25 @@ bcvfdzcvdvdsvfile
 ^[0-9]+\.[0-9]+.[0-9]+$
 ^\d+\.\d+\.\d+(?:\.\d+)?$
 ^[0-9]+\.[0-9]+\.[0-9]+(?:\.[0-9]+)?$
+
+
+
+Approach for unit testing
+
+Use of Github Copilot to write unit test code
+Unit test coverage collection using Jasmine, cobertura, coverlet
+Checking unit test quality gates using github pipeline and automated block PR marge in case of below threshold value   
+Approach for driving code consistency
+
+Use of the rulebook for the routines
+Coding standards defined and evaluated with GHAS
+Reference library for UI styling
+Approach for quality reviews
+
+Peer reviews for any PR approval 
+Tech lead reviews before code commits using codeowner
+Reducing code scan issues
+
+GHAS code scans at each check in
+Fortify scan based on weekly schedule for SCSA analysis
+Mend scan based on weekly schedule for SCA analysis

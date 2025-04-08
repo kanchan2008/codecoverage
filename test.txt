@@ -4,38 +4,3 @@ bcvfdzcvdvdsvfile
 ^[0-9]+\.[0-9]+\.[0-9]+(?:\.[0-9]+)?$
 
 
-
-jobs:
-  run-sql-and-save-output:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Install SQLCMD
-        run: |
-          curl -sSL https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
-          curl -sSL https://packages.microsoft.com/config/ubuntu/20.04/prod.list | sudo tee /etc/apt/sources.list.d/mssql-release.list
-          sudo apt-get update
-          sudo ACCEPT_EULA=Y apt-get install -y msodbcsql17 mssql-tools
-          echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
-          source ~/.bashrc
-
-      - name: Run SQL query and capture output
-        id: run_sql
-        run: |
-          export CONNECTION_STRING="${{ secrets.AZURE_SQL_CONNECTION_STRING }}"
-          SERVER=$(echo $CONNECTION_STRING | sed -n 's/.*Server=tcp:\([^;]*\).*/\1/p')
-          DB=$(echo $CONNECTION_STRING | sed -n 's/.*Initial Catalog=\([^;]*\).*/\1/p')
-          USER=$(echo $CONNECTION_STRING | sed -n 's/.*User ID=\([^;]*\).*/\1/p')
-          PASS=$(echo $CONNECTION_STRING | sed -n 's/.*Password=\([^;]*\).*/\1/p')
-
-          echo "SELECT TOP 1 name FROM sys.databases;" > query.sql
-          RESULT=$(sqlcmd -S $SERVER -d $DB -U $USER -P "$PASS" -i query.sql -h -1 -W)
-          echo "Result: $RESULT"
-
-          # Save to GitHub environment variable
-          echo "DB_NAME=$RESULT" >> $GITHUB_ENV
-
-      - name: Use output
-        run: |
-          echo "The database name is: $DB_NAME"
-
-
